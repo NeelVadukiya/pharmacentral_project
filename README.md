@@ -248,24 +248,6 @@ GET /api/drugs/?search=paracetamol
 
 ---
 
-# Screenshots
-
-Add project screenshots here:
-
-- Login Page
-- Dashboard
-- Inventory Management
-- Billing System
-- Alerts Dashboard
-
-Example:
-
-```markdown
-![Dashboard](screenshots/dashboard.png)
-```
-
----
-
 # Author
 
 ## Neel Vadukiya
@@ -274,23 +256,3 @@ Example:
 - GitHub: https://github.com/NeelVadukiya
 
 ---
-
-# Repository Topics
-
-```text
-django
-python
-pharmacy-management-system
-inventory-management
-django-rest-framework
-sqlite
-full-stack-development
-billing-system
-web-application
-```
-
----
-
-# License
-
-This project is developed for educational and learning purposes.
