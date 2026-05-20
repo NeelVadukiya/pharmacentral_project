@@ -1,0 +1,25 @@
+[
+  {"model": "inventory.drugcategory", "pk": 1, "fields": {"name": "Antibiotic", "created_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drugcategory", "pk": 2, "fields": {"name": "Painkiller", "created_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drugcategory", "pk": 3, "fields": {"name": "Antidiabetic", "created_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drugcategory", "pk": 4, "fields": {"name": "Antihypertensive", "created_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drugcategory", "pk": 5, "fields": {"name": "Antacid", "created_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drugcategory", "pk": 6, "fields": {"name": "Vitamin/Supplement", "created_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drugcategory", "pk": 7, "fields": {"name": "Antihistamine", "created_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drugcategory", "pk": 8, "fields": {"name": "Antifungal", "created_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drugcategory", "pk": 9, "fields": {"name": "Other", "created_at": "2025-01-01T00:00:00Z"}},
+
+  {"model": "inventory.drug", "pk": 1, "fields": {"code": "AMX-500", "name": "Amoxicillin 500mg", "description": "Broad-spectrum antibiotic capsule", "category": 1, "quantity": 200, "minimum_quantity": 30, "unit_price": "8.50", "expiry_date": "2026-08-01", "supplier": "Sun Pharma", "created_at": "2025-01-01T00:00:00Z", "updated_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drug", "pk": 2, "fields": {"code": "MET-850", "name": "Metformin 850mg", "description": "Antidiabetic tablet", "category": 3, "quantity": 15, "minimum_quantity": 30, "unit_price": "5.00", "expiry_date": "2026-12-01", "supplier": "Cipla", "created_at": "2025-01-01T00:00:00Z", "updated_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drug", "pk": 3, "fields": {"code": "ASP-100", "name": "Aspirin 100mg", "description": "Blood thinner tablet", "category": 2, "quantity": 80, "minimum_quantity": 20, "unit_price": "2.50", "expiry_date": "2025-06-01", "supplier": "Bayer", "created_at": "2025-01-01T00:00:00Z", "updated_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drug", "pk": 4, "fields": {"code": "ATV-20", "name": "Atorvastatin 20mg", "description": "Cholesterol lowering tablet", "category": 9, "quantity": 120, "minimum_quantity": 20, "unit_price": "12.00", "expiry_date": "2027-03-01", "supplier": "Ranbaxy", "created_at": "2025-01-01T00:00:00Z", "updated_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drug", "pk": 5, "fields": {"code": "PAN-40", "name": "Pantoprazole 40mg", "description": "Antacid / proton pump inhibitor", "category": 5, "quantity": 8, "minimum_quantity": 25, "unit_price": "6.00", "expiry_date": "2026-09-01", "supplier": "Zydus", "created_at": "2025-01-01T00:00:00Z", "updated_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.drug", "pk": 6, "fields": {"code": "PCM-500", "name": "Paracetamol 500mg", "description": "Fever and pain relief tablet", "category": 2, "quantity": 350, "minimum_quantity": 50, "unit_price": "1.50", "expiry_date": "2027-01-01", "supplier": "GSK", "created_at": "2025-01-01T00:00:00Z", "updated_at": "2025-01-01T00:00:00Z"}},
+
+  {"model": "inventory.customer", "pk": 1, "fields": {"name": "Rajan Mehta", "phone": "9876543210", "address": "12 Gandhi Nagar, Surat", "notes": "", "created_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.customer", "pk": 2, "fields": {"name": "Priya Shah", "phone": "9123456780", "address": "45 Ring Road, Surat", "notes": "Diabetic, allergic to penicillin", "created_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.customer", "pk": 3, "fields": {"name": "Anil Patel", "phone": "9988776655", "address": "7 Station Road, Surat", "notes": "Hypertensive", "created_at": "2025-01-01T00:00:00Z"}},
+
+  {"model": "inventory.debtor", "pk": 1, "fields": {"customer_name": "Rajan Mehta", "customer": 1, "amount_owed": "340.00", "due_date": "2025-12-01", "notes": "Credit purchase Nov batch", "is_paid": false, "paid_date": null, "created_at": "2025-01-01T00:00:00Z"}},
+  {"model": "inventory.debtor", "pk": 2, "fields": {"customer_name": "Anil Patel", "customer": 3, "amount_owed": "120.00", "due_date": "2026-01-15", "notes": "Monthly medicines on credit", "is_paid": false, "paid_date": null, "created_at": "2025-01-01T00:00:00Z"}}
+]

@@ -1,0 +1,25 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Edit Debtor – PharmaCentral{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h2 class="page-title">Edit Debtor Record</h2>
+  <a href="{% url 'debtor_list' %}" class="btn" style="background:#ddd;color:#555">← Back</a>
+</div>
+
+<div class="form-box" style="max-width:480px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group" style="margin-bottom:9px"><label>Customer Name *</label>{{ form.customer_name }}</div>
+    <div class="form-group" style="margin-bottom:9px"><label>Amount Owed (₹) *</label>{{ form.amount_owed }}</div>
+    <div class="form-group" style="margin-bottom:9px"><label>Due Date</label>{{ form.due_date }}</div>
+    <div class="form-group" style="margin-bottom:12px"><label>Notes</label>{{ form.notes }}</div>
+    <div style="display:flex;gap:8px">
+      <button type="submit" class="btn btn-green">Save</button>
+      <a href="{% url 'debtor_list' %}" class="btn" style="background:#ddd;color:#555">Cancel</a>
+      <a href="{% url 'debtor_delete' debtor.pk %}" class="btn btn-red" style="margin-left:auto">Delete</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

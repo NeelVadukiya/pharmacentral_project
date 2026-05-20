@@ -1,0 +1,214 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Dashboard – PharmaCentral{% endblock %}
+{% block content %}
+
+<h2 class="page-title">Dashboard</h2>
+
+<div class="summary-row">
+  <div class="summary-card">
+    <div class="num">{{ total_drugs }}</div>
+    <div class="lbl">Total Drugs</div>
+  </div>
+  <div class="summary-card warn">
+    <div class="num">{{ low_stock }}</div>
+    <div class="lbl">Low Stock</div>
+  </div>
+  <div class="summary-card danger">
+    <div class="num">{{ expired }}</div>
+    <div class="lbl">Expired</div>
+  </div>
+  <div class="summary-card warn">
+    <div class="num">{{ expiring_soon }}</div>
+    <div class="lbl">Expiring Soon</div>
+  </div>
+  <div class="summary-card">
+    <div class="num">{{ total_sales }}</div>
+    <div class="lbl">Total Sales</div>
+  </div>
+  <div class="summary-card">
+    <div class="num">₹{{ total_revenue|floatformat:0 }}</div>
+    <div class="lbl">Revenue</div>
+  </div>
+</div>
+
+<div class="two-col">
+  <div class="form-box">
+    <h3>Recent Sales</h3>
+    {% if recent_sales %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Customer</th><th>Items</th><th>Total</th></tr>
+        </thead>
+        <tbody>
+          {% for sale in recent_sales %}
+          <tr>
+            <td>{{ sale.sale_date }}</td>
+            <td>{{ sale.customer_name }}</td>
+            <td style="font-size:0.78rem">
+              {% for item in sale.items.all %}{{ item.drug.name }} ×{{ item.quantity }}{% if not forloop.last %}, {% endif %}{% endfor %}
+            </td>
+            <td>₹{{ sale.total_amount }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="no-data">No sales yet.</p>
+    {% endif %}
+  </div>
+
+  <div class="form-box">
+    <h3>⚠ Active Alerts</h3>
+    {% if alerts %}
+      {% for alert in alerts|slice:":8" %}
+      <div class="alert-box {{ alert.type }}">{{ alert.msg }}</div>
+      {% endfor %}
+      {% if alerts|length > 8 %}
+      <p style="font-size:0.8rem;color:#888;margin-top:6px">
+        <a href="{% url 'alerts' %}">View all {{ alerts|length }} alerts →</a>
+      </p>
+      {% endif %}
+    {% else %}
+    <div class="alert-box info">✅ No alerts right now.</div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="form-box" style="margin-top:16px">
+  <h3>All in one place</h3>
+  <ul class="nav nav-tabs" role="tablist" style="margin-bottom:12px">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-inventory" type="button" role="tab">Inventory</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-customers" type="button" role="tab">Customers</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-debtors" type="button" role="tab">Debtors</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-purchases" type="button" role="tab">Purchases</button>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="tab-inventory" role="tabpanel">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <div style="font-size:0.82rem;color:#666">Showing latest 12 drugs</div>
+        <a class="btn btn-blue btn-sm" href="{% url 'inventory_list' %}">Open full Inventory →</a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Code</th><th>Name</th><th>Category</th><th>Qty</th><th>Expiry</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            {% for d in inventory_preview %}
+            <tr>
+              <td>{{ d.code }}</td>
+              <td>{{ d.name }}</td>
+              <td>{{ d.category_name }}</td>
+              <td>{{ d.quantity }}</td>
+              <td>{{ d.expiry_date }}</td>
+              <td>
+                <span class="badge badge-{% if d.status == 'expired' %}expired{% elif d.status == 'expiring' %}expiring{% elif d.status == 'low' %}low{% else %}ok{% endif %}">
+                  {{ d.status_label }}
+                </span>
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="no-data">No drugs found.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab-customers" role="tabpanel">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <div style="font-size:0.82rem;color:#666">Showing 12 customers</div>
+        <a class="btn btn-blue btn-sm" href="{% url 'customer_list' %}">Open full Customers →</a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Phone</th><th>Address</th></tr>
+          </thead>
+          <tbody>
+            {% for c in customers_preview %}
+            <tr>
+              <td>{{ c.name }}</td>
+              <td>{{ c.phone|default:"—" }}</td>
+              <td style="max-width:520px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.address|default:"—" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="no-data">No customers found.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab-debtors" role="tabpanel">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <div style="font-size:0.82rem;color:#666">Showing unpaid debtors</div>
+        <a class="btn btn-blue btn-sm" href="{% url 'debtor_list' %}">Open full Debtors →</a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Customer</th><th>Amount</th><th>Due</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            {% for d in debtors_preview %}
+            <tr>
+              <td>{{ d.customer_name }}</td>
+              <td>₹{{ d.amount_owed }}</td>
+              <td>{{ d.due_date|default:"—" }}</td>
+              <td>
+                {% if d.is_overdue %}
+                  <span class="badge badge-expired">Overdue</span>
+                {% else %}
+                  <span class="badge badge-low">Unpaid</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="no-data">No unpaid debtors.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab-purchases" role="tabpanel">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <div style="font-size:0.82rem;color:#666">Showing latest 10 purchases</div>
+        <a class="btn btn-blue btn-sm" href="{% url 'purchase_list' %}">Open full Purchases →</a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Drug</th><th>Qty</th><th>Supplier</th></tr>
+          </thead>
+          <tbody>
+            {% for p in purchases_preview %}
+            <tr>
+              <td>{{ p.purchase_date }}</td>
+              <td>{{ p.drug.name }}</td>
+              <td>{{ p.quantity_received }}</td>
+              <td>{{ p.supplier|default:"—" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="no-data">No purchases found.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

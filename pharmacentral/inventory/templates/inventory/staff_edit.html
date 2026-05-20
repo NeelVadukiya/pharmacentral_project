@@ -1,0 +1,54 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Edit User – PharmaCentral{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h2 class="page-title">Edit User: {{ staff_user.username }}</h2>
+  <a href="{% url 'staff_list' %}" class="btn" style="background:#ddd;color:#555">← Back</a>
+</div>
+
+<div class="form-box" style="max-width:480px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group" style="margin-bottom:10px">
+      <label>Username</label>
+      <input type="text" class="form-control" value="{{ staff_user.username }}" disabled
+             style="background:#eee;color:#888">
+      <small style="color:#888;font-size:0.74rem">Username cannot be changed.</small>
+    </div>
+    <div class="form-group" style="margin-bottom:10px">
+      <label>First Name</label>
+      <input type="text" name="first_name" class="form-control" value="{{ staff_user.first_name }}">
+    </div>
+    <div class="form-group" style="margin-bottom:10px">
+      <label>Last Name</label>
+      <input type="text" name="last_name" class="form-control" value="{{ staff_user.last_name }}">
+    </div>
+    <div class="form-group" style="margin-bottom:10px">
+      <label>Role</label>
+      <select name="role" class="form-control">
+        <option value="staff"  {% if not staff_user.is_staff %}selected{% endif %}>Staff (Salesperson)</option>
+        <option value="admin"  {% if staff_user.is_staff %}selected{% endif %}>Admin (Full Access)</option>
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom:10px">
+      <label>New Password <small style="color:#888;font-weight:normal">(leave blank to keep current)</small></label>
+      <input type="password" name="new_password" class="form-control" placeholder="Enter new password (optional)">
+    </div>
+    <div style="margin-bottom:14px;display:flex;align-items:center;gap:8px">
+      <input type="checkbox" name="is_active" id="isActive" {% if staff_user.is_active %}checked{% endif %}>
+      <label for="isActive" style="font-size:0.85rem;font-weight:normal;color:#333;margin:0">
+        Account is Active (uncheck to disable login)
+      </label>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button type="submit" class="btn btn-green">Save Changes</button>
+      <a href="{% url 'staff_list' %}" class="btn" style="background:#ddd;color:#555">Cancel</a>
+      {% if staff_user != request.user %}
+      <a href="{% url 'staff_delete' staff_user.pk %}" class="btn btn-red" style="margin-left:auto">Delete User</a>
+      {% endif %}
+    </div>
+  </form>
+</div>
+
+{% endblock %}

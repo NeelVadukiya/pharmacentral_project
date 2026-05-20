@@ -1,0 +1,72 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Sales – PharmaCentral{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h2 class="page-title">Sales</h2>
+  <a href="{% url 'sales_report' %}" class="btn btn-blue">📊 Sales Report</a>
+</div>
+
+<div class="two-col">
+  <!-- NEW SALE -->
+  <div class="form-box">
+    <h3>New Sale</h3>
+    <form method="post" action="{% url 'sale_create' %}" id="saleForm">
+      {% csrf_token %}
+      <div class="form-row">
+        <div class="form-group">
+          <label>Customer Name</label>
+          <input type="text" name="customer_name" class="form-control" placeholder="Walk-in or name" list="customerSuggestions">
+          <datalist id="customerSuggestions">{% for c in customers %}<option value="{{ c.name }}">{% endfor %}</datalist>
+        </div>
+        <div class="form-group" style="max-width:160px">
+          <label>Date</label>
+          <input type="date" name="sale_date" class="form-control" id="saleDateField">
+        </div>
+      </div>
+      <div id="saleItemsContainer"></div>
+      <button type="button" class="btn btn-blue btn-sm" onclick="addSaleRow()" style="margin:8px 0">+ Add Item</button>
+      <div class="sale-total">Total: Rs.<span id="saleGrandTotal">0.00</span></div>
+      <button type="submit" class="btn btn-green">Process Sale</button>
+    </form>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="form-box">
+    <h3>Sales History</h3>
+    <form method="get" class="search-bar" style="margin-bottom:12px">
+      <input type="text" name="query" value="{{ query }}" placeholder="Search customer or drug..." class="form-control">
+      <button type="submit" class="btn btn-blue">Search</button>
+      <a href="{% url 'sales_list' %}" class="btn" style="background:#ddd;color:#555">Clear</a>
+    </form>
+    {% if sales %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for sale in sales %}
+          <tr>
+            <td>#{{ sale.id }}</td>
+            <td>{{ sale.sale_date }}</td>
+            <td>{{ sale.customer_name }}</td>
+            <td style="font-size:0.76rem">{% for item in sale.items.all %}{{ item.drug.name }} ×{{ item.quantity }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+            <td>Rs.{{ sale.total_amount }}</td>
+            <td>
+              <a href="{% url 'sale_invoice_pdf' sale.pk %}" class="btn btn-blue btn-sm" target="_blank">🖨 PDF</a>
+              {% if is_admin %}<a href="{% url 'sale_delete' sale.pk %}" class="btn btn-red btn-sm">Del</a>{% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="no-data">No sales found.</p>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+const DRUGS = [{% for d in drugs %}{id:{{d.pk}},name:"{{d.name|escapejs}}",price:{{d.unit_price}},stock:{{d.quantity}}},{% endfor %}];
+</script>
+{% endblock %}

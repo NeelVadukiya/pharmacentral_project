@@ -1,0 +1,82 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Purchases – PharmaCentral{% endblock %}
+{% block content %}
+
+<h2 class="page-title">Purchase / Restock Module</h2>
+
+<div class="side-col">
+  <!-- ADD PURCHASE -->
+  <div class="form-box">
+    <h3>Record New Stock Arrival</h3>
+    <form method="post" action="{% url 'purchase_add' %}">
+      {% csrf_token %}
+      <div class="form-group" style="margin-bottom:9px">
+        <label>Drug *</label>{{ form.drug }}
+        {% if is_admin %}
+        <div style="margin-top:6px">
+          <a class="btn btn-blue btn-sm" href="{% url 'drug_add' %}?next={{ request.path|urlencode }}">+ Add new drug</a>
+        </div>
+        {% endif %}
+      </div>
+      <div class="form-group" style="margin-bottom:9px">
+        <label>Quantity Received *</label>{{ form.quantity_received }}
+      </div>
+      <div class="form-group" style="margin-bottom:9px">
+        <label>Unit Cost (Rs.) *</label>{{ form.unit_cost }}
+      </div>
+      <div class="form-group" style="margin-bottom:9px">
+        <label>Supplier</label>{{ form.supplier }}
+      </div>
+      <div class="form-group" style="margin-bottom:9px">
+        <label>Purchase Date</label>{{ form.purchase_date }}
+      </div>
+      <div class="form-group" style="margin-bottom:9px">
+        <label>Invoice Number</label>{{ form.invoice_number }}
+      </div>
+      <div class="form-group" style="margin-bottom:12px">
+        <label>Notes</label>{{ form.notes }}
+      </div>
+      <button type="submit" class="btn btn-green">Save Purchase & Update Stock</button>
+    </form>
+  </div>
+
+  <!-- PURCHASE HISTORY -->
+  <div class="form-box">
+    <h3>Purchase History</h3>
+    <form method="get" class="search-bar" style="margin-bottom:12px">
+      <input type="text" name="query" value="{{ query }}" placeholder="Search drug or supplier..." class="form-control">
+      <button type="submit" class="btn btn-blue">Search</button>
+      <a href="{% url 'purchase_list' %}" class="btn" style="background:#ddd;color:#555">Clear</a>
+    </form>
+    {% if purchases %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Drug</th><th>Qty</th><th>Unit Cost</th><th>Total Cost</th><th>Supplier</th><th>Invoice</th><th>By</th>{% if is_admin %}<th></th>{% endif %}</tr>
+        </thead>
+        <tbody>
+          {% for p in purchases %}
+          <tr>
+            <td>{{ p.purchase_date }}</td>
+            <td><strong>{{ p.drug.name }}</strong></td>
+            <td>{{ p.quantity_received }}</td>
+            <td>Rs.{{ p.unit_cost }}</td>
+            <td>Rs.{{ p.total_cost }}</td>
+            <td>{{ p.supplier|default:"-" }}</td>
+            <td>{{ p.invoice_number|default:"-" }}</td>
+            <td>{{ p.received_by|default:"Staff" }}</td>
+            {% if is_admin %}
+            <td><a href="{% url 'purchase_delete' p.pk %}" class="btn btn-red btn-sm">Del</a></td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="no-data">No purchase records found.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

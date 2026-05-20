@@ -1,0 +1,23 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Confirm Delete – PharmaCentral{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h2 class="page-title">Confirm Delete</h2>
+</div>
+
+<div class="form-box" style="max-width:440px">
+  <p style="margin-bottom:16px;font-size:0.92rem;color:#555">
+    Are you sure you want to delete <strong>{{ object }}</strong>?
+    This action <strong>cannot be undone</strong>.
+  </p>
+  <form method="post">
+    {% csrf_token %}
+    <div style="display:flex;gap:10px">
+      <button type="submit" class="btn btn-red">Yes, Delete</button>
+      <a href="javascript:history.back()" class="btn" style="background:#ddd;color:#555">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

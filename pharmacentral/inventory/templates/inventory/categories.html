@@ -1,0 +1,46 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Drug Categories – PharmaCentral{% endblock %}
+{% block content %}
+
+<h2 class="page-title">Drug Categories</h2>
+
+<div class="side-col">
+  <div class="form-box">
+    <h3>Add New Category</h3>
+    <form method="post" action="{% url 'category_add' %}">
+      {% csrf_token %}
+      <div class="form-group" style="margin-bottom:10px">
+        <label>Category Name *</label>
+        {{ form.name }}
+      </div>
+      <button type="submit" class="btn btn-green">Add Category</button>
+    </form>
+  </div>
+
+  <div class="form-box">
+    <h3>All Categories</h3>
+    {% if categories %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Category Name</th><th>No. of Drugs</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for cat in categories %}
+          <tr>
+            <td><strong>{{ cat.name }}</strong></td>
+            <td>{{ cat.drugs.count }}</td>
+            <td>
+              <a href="{% url 'category_edit' cat.pk %}" class="btn btn-blue btn-sm">Edit</a>
+              <a href="{% url 'category_delete' cat.pk %}" class="btn btn-red btn-sm">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="no-data">No categories yet. Add one above.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

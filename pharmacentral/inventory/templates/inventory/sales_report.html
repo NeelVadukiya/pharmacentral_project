@@ -1,0 +1,64 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Sales Report – PharmaCentral{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h2 class="page-title">Sales Report</h2>
+  {% if sales %}
+  <a href="{% url 'sales_report_csv' %}?date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-green">⬇ Export CSV</a>
+  {% endif %}
+</div>
+
+<div class="form-box" style="max-width:500px">
+  <h3>Select Date Range</h3>
+  <form method="get">
+    <div class="form-row">
+      <div class="form-group">
+        <label>From Date</label>{{ form.date_from }}
+      </div>
+      <div class="form-group">
+        <label>To Date</label>{{ form.date_to }}
+      </div>
+    </div>
+    <button type="submit" class="btn btn-blue">Generate Report</button>
+  </form>
+</div>
+
+{% if sales is not None %}
+<div class="form-box">
+  <h3>
+    Results: {{ date_from }} to {{ date_to }}
+    &nbsp;|&nbsp; <span style="color:#1a6e5c">{{ sales.count }} sale(s)</span>
+    &nbsp;|&nbsp; <span style="color:#1a6e5c">Total: Rs.{{ total }}</span>
+  </h3>
+
+  {% if sales %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ID</th><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Invoice</th></tr></thead>
+      <tbody>
+        {% for sale in sales %}
+        <tr>
+          <td>#{{ sale.id }}</td>
+          <td>{{ sale.sale_date }}</td>
+          <td>{{ sale.customer_name }}</td>
+          <td style="font-size:0.76rem">{% for item in sale.items.all %}{{ item.drug.name }} ×{{ item.quantity }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+          <td>Rs.{{ sale.total_amount }}</td>
+          <td><a href="{% url 'sale_invoice_pdf' sale.pk %}" class="btn btn-blue btn-sm" target="_blank">PDF</a></td>
+        </tr>
+        {% endfor %}
+        <tr style="font-weight:bold;background:#e0f5f2">
+          <td colspan="4" style="text-align:right">Grand Total</td>
+          <td>Rs.{{ total }}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="no-data">No sales found for this date range.</p>
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

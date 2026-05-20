@@ -1,0 +1,17 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Alerts – PharmaCentral{% endblock %}
+{% block content %}
+
+<h2 class="page-title">⚠ System Alerts</h2>
+
+<div class="form-box">
+  {% if alerts %}
+    {% for alert in alerts %}
+    <div class="alert-box {{ alert.type }}">{{ alert.msg }}</div>
+    {% endfor %}
+  {% else %}
+    <div class="alert-box info">✅ No alerts at this time. Everything looks good.</div>
+  {% endif %}
+</div>
+
+{% endblock %}

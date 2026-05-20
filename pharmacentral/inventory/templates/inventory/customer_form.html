@@ -1,0 +1,25 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Edit Customer – PharmaCentral{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h2 class="page-title">Edit Customer</h2>
+  <a href="{% url 'customer_list' %}" class="btn" style="background:#ddd;color:#555">← Back</a>
+</div>
+
+<div class="form-box" style="max-width:480px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group" style="margin-bottom:9px"><label>Full Name *</label>{{ form.name }}</div>
+    <div class="form-group" style="margin-bottom:9px"><label>Phone</label>{{ form.phone }}</div>
+    <div class="form-group" style="margin-bottom:9px"><label>Address</label>{{ form.address }}</div>
+    <div class="form-group" style="margin-bottom:12px"><label>Notes</label>{{ form.notes }}</div>
+    <div style="display:flex;gap:8px">
+      <button type="submit" class="btn btn-green">Save</button>
+      <a href="{% url 'customer_list' %}" class="btn" style="background:#ddd;color:#555">Cancel</a>
+      <a href="{% url 'customer_delete' customer.pk %}" class="btn btn-red" style="margin-left:auto">Delete</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

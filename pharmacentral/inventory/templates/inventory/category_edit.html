@@ -1,0 +1,22 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Edit Category – PharmaCentral{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2 class="page-title">Edit Category</h2>
+  <a href="{% url 'category_list' %}" class="btn" style="background:#ddd;color:#555">← Back</a>
+</div>
+<div class="form-box" style="max-width:400px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group" style="margin-bottom:12px">
+      <label>Category Name *</label>
+      {{ form.name }}
+    </div>
+    <div style="display:flex;gap:8px">
+      <button type="submit" class="btn btn-green">Save</button>
+      <a href="{% url 'category_list' %}" class="btn" style="background:#ddd;color:#555">Cancel</a>
+      <a href="{% url 'category_delete' cat.pk %}" class="btn btn-red" style="margin-left:auto">Delete</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
